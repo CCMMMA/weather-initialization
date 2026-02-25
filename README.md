@@ -1,13 +1,20 @@
 # weather-initialization
-A script to initialize a new system based on ubuntu 
+A script to initialize a new system based on Ubuntu 
 
 ## Installation
-Preliminary
+Preliminary: upgrade to the latest and reboot
 ```sh
 sudo apt update
 sudo apt upgrade -y
+sudo reboot
+```
 
-sudo apt install git -y
+Install the minimal software requirements and enable SSH access
+```sh
+sudo apt install git openssh-server openssh-client -y
+```
+
+```sh
 cd $HOME
 git clone https://github.com/ccmmma/weather-initialization.git
 cd weather-initialization/
