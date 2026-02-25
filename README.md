@@ -14,6 +14,7 @@ Install the minimal software requirements and enable SSH access
 sudo apt install git openssh-server openssh-client -y
 ```
 
+Clone the weather station installation repository
 ```sh
 cd $HOME
 git clone https://github.com/ccmmma/weather-initialization.git
@@ -30,7 +31,7 @@ Set permissions
 chmod +x ./initialize-weather.sh
 ```
 
-Run the script
+Run the script as root
 ```sh
 sudo -E ./initialize-weather.sh
 ```
