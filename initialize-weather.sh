@@ -74,7 +74,7 @@ sudo chmod g+s /storage
 echo -e "\e[91m---- INSTALLING PyVantagePro AND SETTING VANTAGEPRO DATE ----\e[0m"
 sudo -u "$USER" bash -c "
     pip install --upgrade pip
-    pip install git+https://github.com/gennaromellone/PyVantagePro.git
+    pip install git+https://github.com/ccmmma/PyVantagePro.git
     current_time=\$(date '+%Y-%m-%d %H:%M:%S')
     pyvantagepro settime tcp:127.0.0.1:22222 \"\$current_time\"
     chmod +x $HOME/weather-initialization/util/backup-eeprom.py
@@ -84,7 +84,7 @@ sudo -u "$USER" bash -c "
 echo -e "\e[91m---- INSTALLING VANTAGE-PUBLISHER ----\e[0m"
 sudo -u "$USER" bash -c "
     cd $HOME
-    git clone https://github.com/gennaromellone/vantage-publisher
+    git clone https://github.com/ccmmma/vantage-publisher
     cd vantage-publisher
     chmod +x vantage-updater.sh
     make build
