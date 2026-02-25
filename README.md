@@ -4,6 +4,9 @@ A script to initialize a new system based on ubuntu
 ## Installation
 Preliminary
 ```sh
+sudo apt update
+sudo apt upgrade -y
+
 sudo apt install git -y
 cd $HOME
 git clone https://github.com/ccmmma/weather-initialization.git
