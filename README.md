@@ -5,7 +5,7 @@ A script to initialize a new system based on ubuntu
 Preliminary
 ```sh
 cd $HOME
-git clone https://github.com/gennaromellone/weather-initialization.git
+git clone https://github.com/ccmmma/weather-initialization.git
 cd weather-initialization/
 ```
 
