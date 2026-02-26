@@ -11,7 +11,9 @@ sudo reboot
 
 Install the minimal software requirements and enable SSH access
 ```sh
-sudo apt install git openssh-server openssh-client -y
+sudo apt install git openssh-server -y
+sudo systemctl start ssh.service
+sudo systemctl enable ssh.service
 ```
 
 Clone the weather station installation repository
