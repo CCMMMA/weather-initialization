@@ -10,7 +10,9 @@ if [ -z "$ANYPWD" ]; then
     exit 1
 fi
 
-echo -e "\e[91m---- Setting $USER as weather stationn user ----\e[0m"
+SUDO_HOME=$(getent passwd $SUDO_USER | cut -d: -f6)
+
+echo -e "\e[91m---- Setting $SUDO_USER as ws user in $SUDO_HOME ----\e[0m"
 
 echo -e "\e[91m---- SETTING HOTSPOT ----\e[0m"
 
@@ -32,59 +34,59 @@ apt update
 apt install anydesk -y
 echo -e "\e[91mSetting password ...\e[0m"
 echo $ANYPWD | sudo anydesk --set-password
-cp $HOME/weather-initialization/util/custom.conf /etc/gdm3/custom.conf
+cp $SUDO_HOME/weather-initialization/util/custom.conf /etc/gdm3/custom.conf
 
 echo -e "\e[91mSetting dummy display ...\e[0m"
 apt-get install xserver-xorg-video-dummy
-cp $HOME/weather-initialization/util/xorg.conf /etc/X11/xorg.conf
+cp $SUDO_HOME/weather-initialization/util/xorg.conf /etc/X11/xorg.conf
 
 
 echo -e "\e[91m---- INSTALLING DOCKER ----\e[0m"
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 groupadd docker
-usermod -aG docker $USER
+usermod -aG docker $SUDO_USER
 sudo chmod 666 /var/run/docker.sock
 systemctl enable docker.service
 systemctl enable containerd.service
 apt-get install docker-compose -y
-chown "$USER":"$USER" /home/"$USER"/.docker -R
-sudo chmod g+rwx "$HOME/.docker" -R
+chown "$SUDO_USER":"$SUDO_USER" /home/"$SUDO_USER"/.docker -R
+sudo chmod g+rwx "$SUDO_HOME/.docker" -R
 
 
 echo -e "\e[91m---- INSTALLING SER2NET ----\e[0m"
 apt-get install ser2net -y
-cp $HOME/weather-initialization/util/ser2net.yaml /etc/ser2net.yaml
-cp $HOME/weather-initialization/util/ser2net.service /lib/systemd/system/ser2net.service
+cp $SUDO_HOME/weather-initialization/util/ser2net.yaml /etc/ser2net.yaml
+cp $SUDO_HOME/weather-initialization/util/ser2net.service /lib/systemd/system/ser2net.service
 echo -e "\e[91mActivating ser2net ...\e[0m"
 systemctl restart ser2net.service 
 
 echo -e "\e[91m---- INSTALLING CONNECTION CHECKER DAEMON ----\e[0m"
-chmod +x $HOME/weather-initialization/util/vpn-checker.sh
-cp $HOME/weather-initialization/util/connection-status.service /etc/systemd/
+chmod +x $SUDO_HOME/weather-initialization/util/vpn-checker.sh
+cp $SUDO_HOME/weather-initialization/util/connection-status.service /etc/systemd/
 systemctl enable $HOME/weather-initialization/util/connection-status.service
 #sudo systemctl start $HOME/weather-initialization/util/connection-status.service
 
 echo -e "\e[91m---- CREATING STORAGE AND SETTING PERMISSIONS ----\e[0m"
 mkdir -p /storage
 groupadd vantagepro
-chown -R :vantagepro /storage
-usermod -aG vantagepro ${USER}
+chown -R $SUDO_USER:vantagepro /storage
+usermod -aG vantagepro ${SUDO_USER}
 chmod -R 777 /storage
 chmod g+s /storage
 
 echo -e "\e[91m---- INSTALLING PyVantagePro AND SETTING VANTAGEPRO DATE ----\e[0m"
-sudo -u "$USER" bash -c "
+sudo -u "$SUDO_USER" bash -c "
     pip install --upgrade pip
     pip install git+https://github.com/ccmmma/PyVantagePro.git
     current_time=\$(date '+%Y-%m-%d %H:%M:%S')
     pyvantagepro settime tcp:127.0.0.1:22222 \"\$current_time\"
-    chmod +x $HOME/weather-initialization/util/backup-eeprom.py
-    chmod +x $HOME/weather-initialization/util/eeprom.sh
+    chmod +x $SUDO_HOME/weather-initialization/util/backup-eeprom.py
+    chmod +x $SUDO_HOME/weather-initialization/util/eeprom.sh
 "
 
 echo -e "\e[91m---- INSTALLING VANTAGE-PUBLISHER ----\e[0m"
-sudo -u "$USER" bash -c "
+sudo -u "$SUDO_USER" bash -c "
     cd $HOME
     git clone https://github.com/ccmmma/vantage-publisher
     cd vantage-publisher
@@ -92,14 +94,14 @@ sudo -u "$USER" bash -c "
     make build
     docker compose up -d
 "
-cp $HOME/weather-initialization/util/vantage-updater.service /etc/systemd/
-systemctl enable $HOME/weather-initialization/util/vantage-updater.service
+cp $SUDO_HOME/weather-initialization/util/vantage-updater.service /etc/systemd/
+systemctl enable $SUDO_HOME/weather-initialization/util/vantage-updater.service
 
 echo -e "\e[91m---- SETTING CRONTAB ----\e[0m"
 {
     crontab -l 2>/dev/null
     echo "0 0 * * 0 /sbin/reboot"
-    echo "0 * * * * ${HOME}/weather-initialization/util/eeprom.sh >> /storage/log/eeprom.log 2>&1"
+    echo "0 * * * * ${SUDO_HOME}/weather-initialization/util/eeprom.sh >> /storage/log/eeprom.log 2>&1"
 } | crontab -
 echo -e "\e[91mCrontab updated successfully!\e[0m"
 
