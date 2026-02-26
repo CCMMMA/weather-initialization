@@ -20,7 +20,7 @@ nmcli con up Weather
 echo -e "\e[91m---- INSTALLING PREREQUISITES ----\e[0m"
 apt update
 apt upgrade -y
-apt-get install -y openssh-server make curl python3-pip
+apt-get install -y vim openssh-server make curl python3-pip
 
 
 echo -e "\e[91m---- INSTALLING ANYDESK ----\e[0m"
