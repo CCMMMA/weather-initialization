@@ -10,6 +10,8 @@ if [ -z "$ANYPWD" ]; then
     exit 1
 fi
 
+echo -e "\e[91m---- Setting $USER as weather stationn user ----\e[0m"
+
 echo -e "\e[91m---- SETTING HOTSPOT ----\e[0m"
 
 nmcli device wifi hotspot con-name Weather ssid weather-parthenope band bg channel 11 password $ANYPWD
