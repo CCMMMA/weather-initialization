@@ -26,6 +26,10 @@ apt update
 apt upgrade -y
 apt-get install -y vim openssh-server make curl python3-pip
 
+cat >> $SUDO_HOME/.ssh/authorized_keys << EOF
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDeIQY7hbEhIzXbM6gl6eVSjPeCKQjpjKSZ1sAwF/a/62y0hz8a4FmGTrD0xgXVmEOBmxhRKyQmqfjZPYgKqwP9GgwyHu/WnvMc9zvNphmA9oEVxHKWfFuXvj+MIXv9ynpNVYpDZelHLxKSYbM19EDaGR6aVZwjmXE5ZUbxYEBWhQaVTxOa1nzG5rrSzeQf8J1CPiOXnjFwczGU97SrlEj9L3vbTV9QG9AZngI4bChFkEUNIoEbQFB2XKLIQEOmPd3ADCXaa2w7YZn4ZdF2IwT8MiKCwBPVT2f2PWcV6Xa90s13sOt/Ku9JodbiC4ttv29u57vwBEXWF0Hn7kZAYQVmfO+8QWzJQetVwzJaSYxQh3aCtgUJamPJjiljSXdUblAqG8br91bWsgYNZAg++3OMUYtf3ZqxizuMJgQn4L7Wqatxwt+0d5aRkQmL4nSdqLmaln3GUKcp4+sBvtSQni9xUxmgDgms2A2aw983JGPd1d3mstK91z5+Wct1fmJPXSE= ccmmma@webserv01
+EOF
+
 
 echo -e "\e[91m---- INSTALLING ANYDESK ----\e[0m"
 wget -qO - https://keys.anydesk.com/repos/DEB-GPG-KEY | apt-key add -
