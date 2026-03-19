@@ -4,17 +4,10 @@
 
 [daemon]
 AutomaticLoginEnable=true
-AutomaticLogin=$USERNAME
+AutomaticLogin=__WS_USER__
 
 # Uncomment the line below to force the login screen to use Xorg
 WaylandEnable=false
-
-# Enabling automatic login
-
-# Enabling timed login
-#  TimedLoginEnable = true
-#  TimedLogin = user1
-#  TimedLoginDelay = 10
 
 [security]
 
@@ -24,7 +17,4 @@ WaylandEnable=false
 
 [debug]
 # Uncomment the line below to turn on debugging
-# More verbose logs
-# Additionally lets the X server dump core if it crashes
 #Enable=true
-

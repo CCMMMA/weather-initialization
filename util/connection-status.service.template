@@ -1,0 +1,15 @@
+[Unit]
+Description=Check and recover weather station network connectivity
+After=network-online.target anydesk.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+EnvironmentFile=-/etc/default/weather-initialization
+ExecStart=__INSTALL_DIR__/util/vpn-checker.sh
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

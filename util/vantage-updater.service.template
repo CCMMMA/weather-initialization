@@ -1,0 +1,13 @@
+[Unit]
+Description=Update repository vantage-publisher
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=__WS_USER__
+WorkingDirectory=__VANTAGE_PUBLISHER_DIR__
+ExecStart=__VANTAGE_PUBLISHER_DIR__/vantage-updater.sh
+
+[Install]
+WantedBy=multi-user.target

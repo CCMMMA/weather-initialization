@@ -1,30 +1,36 @@
 #!/bin/bash
-# Code used to create a backup file from the EEPROM of the WS, 
 
-echo "Starting updating DB in EEPROM ..."
-cd /home/weather/vantage-publisher
-URL="127.0.0.1:22222"
+set -euo pipefail
 
-YEAR=$(date +"%Y")
-MONTH=$(date +"%m")
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+INSTALL_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-BASE_PATH="/storage/eeprom"
+if [[ -f /etc/default/weather-initialization ]]; then
+    # shellcheck disable=SC1091
+    source /etc/default/weather-initialization
+fi
+
+VANTAGE_PUBLISHER_DIR="${VANTAGE_PUBLISHER_DIR:-$HOME/vantage-publisher}"
+WEATHER_DEVICE_URL="${WEATHER_DEVICE_URL:-tcp:127.0.0.1:22222}"
+STORAGE_DIR="${STORAGE_DIR:-/storage}"
+
+echo "Starting EEPROM archive backup..."
+cd "${VANTAGE_PUBLISHER_DIR}"
+
+YEAR="$(date +"%Y")"
+MONTH="$(date +"%m")"
+BASE_PATH="${STORAGE_DIR}/eeprom"
 
 mkdir -p "${BASE_PATH}/${YEAR}"
 
 CSV_DB="${BASE_PATH}/${YEAR}/${YEAR}-${MONTH}.csv"
-
 START_DATE="${YEAR}-${MONTH}-01 00:00"
-LAST_DATE=$(date -d "$(date +'%Y-%m-01') +1 month -1 day" +'%Y-%m-%d')
-END_DATE="${LAST_DATE} 23:59"
-echo $START_DATE $END_DATE
 
 docker compose down
+trap 'docker compose up -d' EXIT
 
-python3 /home/weather/weather-inizialization/util/backup-eeprom.py tcp:${URL}\
+python3 "${INSTALL_DIR}/util/backup-eeprom.py" "${WEATHER_DEVICE_URL}" \
     --start "${START_DATE}" \
     --output "${CSV_DB}"
 
-echo "DB updated in EEPROM: ${CSV_DB}"
-
-docker compose up -d
+echo "EEPROM backup updated: ${CSV_DB}"

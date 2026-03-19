@@ -48,6 +48,10 @@ def main():
                     d[key] = value
             packet_data.append(d)
 
+    if not packet_data:
+        print("No archive data found for the requested date range.")
+        return
+
     try:
         with open(filename, mode='w', newline='') as file:
             fieldnames = packet_data[0].keys()

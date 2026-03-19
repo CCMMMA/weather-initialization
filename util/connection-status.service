@@ -1,8 +1,0 @@
-[Unit]
-Description=Check active VPN connection.
-
-[Service]
-ExecStart=/home/weather/weather-initialization/util/vpn-checker.sh
-
-[Install]
-WantedBy=multi-user.target
